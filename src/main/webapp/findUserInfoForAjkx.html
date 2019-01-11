@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="other/node_modules/bootstrap3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="other/node_modules/bootstrap3/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet"
+          href="other/node_modules/layui-src/dist/css/layui.css">
+    <script type="text/javascript" src="other/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="other/node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="other/node_modules/layui-src/dist/layui.all.js"></script>
+    <script>
+        //
+        function searchUserByRole() {
+            $.get("searchServlet",{"role":$('#searchByRole').val()},function (data) {
+                var obj = JSON.parse(data);
+                var str = "";
+                $.each(obj, function (index, row, ee) {
+                    str += "<tr align='center'><td>" + eval(index + 1) + "</td><td>" + row.uname + "</td><td>"
+                        + row.upwd + "</td><td>" + 123 + "</td><td>" + row.role + "</td><td>" +
+                        "<a href='javascript:deleteUserById(\" " + row.id + " \")' title='删除' onclick='return confirm(\"是否真的删除本记录\")'><span class='glyphicon glyphicon-remove'></span></a>";
+                });
+                $("#allUser").html(str);
+            });
+        }
+        function addUserInfo() {
+            $.post("userServletForAjkx", {"uname": $('#uname').val(), "role": $('#role').val()}, function (data) {
+                if (data == "true") {
+                    layer.msg("添加记录成功");
+                    $('#addModal').modal("hide");
+                    findAllUser();
+                } else {
+
+                }
+            });
+        }
+
+        function showAddModel() {
+            $('#addModal').modal("show");
+        }
+
+        function deleteUserById(id) {
+            console.info(id);
+            $.ajax({
+                url: "deleteUserByServlet",
+                data: {"id": id},
+                success: function (result) {
+                    if (result == "true") {
+                        findAllUser();//更新一下数据库
+                    } else {
+                        alert("删除失败")
+                    }
+
+                }, error: function () {
+                    alert("访问服务器失败");
+                }
+            })
+        }
+    </script>
+    <script>
+        function findAllUser() {
+            $.ajax({
+                url: "userServletForAjkx",
+                method: "get",
+                success: function (result) {
+                    var obj = JSON.parse(result);
+                    var str = "";
+                    $.each(obj, function (index, row, ee) {
+                        str += "<tr align='center'><td>" + eval(index + 1) + "</td><td>" + row.uname + "</td><td>"
+                            + row.upwd + "</td><td>" + 123 + "</td><td>" + row.role + "</td><td>" +
+                            "<a href='javascript:deleteUserById(\" " + row.id + " \")' title='删除' onclick='return confirm(\"是否真的删除本记录\")'><span class='glyphicon glyphicon-remove'></span></a>" +
+                            "<a href='javascript:deleteUserById(\\\" \"+row.id+\" \\\")'></td></tr>";
+
+                    });
+                    $("#allUser").html(str);
+                },
+                error: function () {
+                    alert("服务器请求失败")
+                }
+            });
+        }
+
+        findAllUser();
+    </script>
+</head>
+<body>
+<div class="well">
+    <div class="form-inline">
+        <a href="javascript:showAddModel()" class="btn btn-default"><span
+                class="glyphicon glyphicon-zoom-in">&nbsp;添加</span></a>
+        <select id="searchByRole" class="form-control" onchange="javascript:searchUserByRole()">
+            <option value="admin">admin</option>
+            <option value="teacher">teacher</option>
+            <option value="student">student</option>
+        </select>
+    </div>
+</div>
+<table class="table table-striped table-hover table-bordered">
+    <tr>
+        <td>id</td>
+        <td>uname</td>
+        <td>upwd</td>
+        <td>lastLoginTime</td>
+        <td>Role</td>
+        <td>删除</td>
+    </tr>
+    <tbody id="allUser">
+
+    </tbody>
+</table>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <input type="text" id="uname" class="form-control" placeholder="请输入姓名">
+                    <span class="glyphicon glyphicon-user input-group-addon"></span>
+                </div>
+                <br>
+                <div class="input-group">
+                    <select id="role" name="role" class="form-control">
+                        <option value="">请选择...</option>
+                        <option value="student">student</option>
+                        <option value="teacher">teacher</option>
+                    </select>
+                    <span class="glyphicon glyphicon-leaf input-group-addon"></span>
+                </div>
+                <br>
+                <div class="input-group">
+                    <input type="password" class="form-control" placeholder="请输入密码">
+                    <span class="glyphicon glyphicon-user input-group-addon"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addUserInfo()">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="other/node_modules/bootstrap3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="other/node_modules/bootstrap3/dist/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="other/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="other/node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="navbar-fixed-top nav navbar-inverse" id="nav_bar">
+    <h3 class="text-danger col-lg-offset-1">
+        <span class="glyphicon-bed">
+            <font color="white">***管理系统</font>
+        </span>
+    </h3>
+</div>
+
+<div class="row" >
+    <div class="col-lg-3 col-md-3 col-sm-3" id="left_bar">
+
+        <a href="#" class="list-group-item active">
+            免费域名注册
+        </a>
+        <a href="#" class="list-group-item" >用户登录</a>
+        <a href="#" class="list-group-item">免费 Window</a>
+        <a href="#" class="list-group-item">图像的数量</a>
+        <a href="#" class="list-group-item">每年更新成本</a>
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-9">
+        <iframe name="iframe" src="WEB-INF/welcome.html" style="width: 100%;height: 600px" frameborder="0"></iframe>
+    </div>
+</div>
+<div align="center" class="navbar-fixed-bottom">
+    <address style="background-color: #2aabd2;height: 30px"> &copy; 2018-2019 Power by 天津工业大学</address>
+</div>
+</body>
+<script>
+    var hei = document.getElementById("nav_bar");
+    alert(hei.offsetHeight);
+    var l_bar = document.getElementById("left_bar");
+    var height = hei.offsetHeight;
+    alert(height);
+    l_bar.style.marginTop=height;
+</script>
+</html>
